@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Names Celestial Explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&family=Aref+Ruqaa:wght@400;700&display=swap');
+    
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #e74c3c;
+            --accent-color: #f39c12;
+            --bg-color: #ecf0f1;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            --shadow-1: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-2: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 100% 50%, transparent 20%, rgba(255,255,255,.3) 21%, rgba(255,255,255,.3) 34%, transparent 35%, transparent),
+                radial-gradient(circle at 0% 50%, transparent 20%, rgba(255,255,255,.3) 21%, rgba(255,255,255,.3) 34%, transparent 35%, transparent) 0 -50px;
+            background-size: 75px 100px;
+            animation: backgroundScroll 60s linear infinite;
+        }
+    
+        @keyframes backgroundScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+    
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: var(--shadow-1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+    
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+    
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+    
+        h1 {
+            font-family: 'Aref Ruqaa', serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            color: transparent;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: colorChange 8s infinite alternate;
+        }
+    
+        @keyframes colorChange {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+    
+        h1::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease;
+        }
+    
+        h1:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+    
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+    
+        #search-input {
+            width: 60%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px 0 0 50px;
+            outline: none;
+            background-color: var(--card-bg);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+    
+        #search-input:focus {
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    
+        #search-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        #search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    
+        .gender-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+    
+        .gender-btn {
+            padding: 0.5rem 1.5rem;
+            font-size: 1.1rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 2px solid var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .gender-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+    
+        .gender-btn:hover::before {
+            left: 0;
+        }
+    
+        .gender-btn:hover {
+            color: white;
+        }
+    
+        .gender-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    
+        .gender-btn:first-child {
+            border-radius: 50px 0 0 50px;
+        }
+    
+        .gender-btn:last-child {
+            border-radius: 0 50px 50px 0;
+        }
+    
+        .name-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+    
+        .name-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: var(--shadow-2);
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .name-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--gradient-2);
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.6s ease;
+            transform: rotate(45deg) translateY(-100%);
+        }
+    
+        .name-card:hover::before {
+            opacity: 0.1;
+            transform: rotate(45deg) translateY(0);
+        }
+    
+        .name-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+    
+        .name-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+    
+        .name-card p {
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+    
+        .blur {
+            filter: blur(5px);
+            transition: filter 0.5s ease;
+        }
+    
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-1);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+    
+        .popup.show {
+            opacity: 1;
+            visibility: visible;
+            animation: popupAppear 0.5s ease;
+        }
+    
+        @keyframes popupAppear {
+            0% { transform: translate(-50%, -60%); opacity: 0; }
+            100% { transform: translate(-50%, -50%); opacity: 1; }
+        }
+    
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+    
+            h1 {
+                font-size: 2.5rem;
+            }
+    
+            .search-container {
+                flex-direction: column;
+                align-items: center;
+            }
+    
+            #search-input, #search-btn {
+                width: 100%;
+                border-radius: 50px;
+                margin-bottom: 1rem;
+            }
+    
+            .gender-toggle {
+                flex-direction: column;
+                align-items: center;
+            }
+    
+            .gender-btn {
+                width: 100%;
+                border-radius: 50px;
+                margin-bottom: 1rem;
+            }
+    
+            .name-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <header>
+            <h1>Islamic Names Celestial Explorer</h1>
+        </header>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Explore names...">
+            <button id="search-btn">Search</button>
+        </div>
+        <div class="gender-toggle">
+            <button class="gender-btn active" data-gender="all">All</button>
+            <button class="gender-btn" data-gender="male">Boys</button>
+            <button class="gender-btn" data-gender="female">Girls</button>
+        </div>
+        <div class="name-cards" id="name-cards"></div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modal-message"></p>
+        </div>
+    </div>
+
+    <script>
+       const muslimBoyNames = [
+        { name: "Aadil", meaning: "Just, fair" },
+  { name: "Aamir", meaning: "Prosperous" },
+  { name: "Aarif", meaning: "Knowledgeable" },
+  { name: "Aashif", meaning: "Forgiver" },
+  { name: "Ahsan", meaning: "Best, excellent" },
+  { name: "Ayaan", meaning: "Gift of God" },
+  { name: "Badr", meaning: "Full moon" },
+  { name: "Basil", meaning: "Brave, courageous" },
+  { name: "Danish", meaning: "Knowledge" },
+  { name: "Ehsan", meaning: "Perfection, beneficence" },
+  { name: "Fahad", meaning: "Panther, cheetah" },
+  { name: "Faris", meaning: "Knight" },
+  { name: "Farid", meaning: "Unique, unmatched" },
+  { name: "Furqan", meaning: "Criterion" },
+  { name: "Ghani", meaning: "Rich, wealthy" },
+  { name: "Ghalib", meaning: "Victor" },
+  { name: "Habib", meaning: "Beloved" },
+  { name: "Hamid", meaning: "Praiseworthy" },
+  { name: "Haseeb", meaning: "Respected" },
+  { name: "Hasan", meaning: "Good, handsome" },
+  { name: "Hussain", meaning: "Handsome, young" },
+  { name: "Ibrahim", meaning: "Father of many" },
+  { name: "Ilyas", meaning: "Elijah" },
+  { name: "Imran", meaning: "Prosperity" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Jamal", meaning: "Beauty" },
+  { name: "Jameel", meaning: "Handsome" },
+  { name: "Junaid", meaning: "Soldier" },
+  { name: "Juzar", meaning: "God-fearing" },
+  { name: "Kadir", meaning: "Powerful" },
+  { name: "Khalid", meaning: "Eternal, immortal" },
+  { name: "Khalil", meaning: "Friend" },
+  { name: "Luqman", meaning: "Wise" },
+  { name: "Mahmoud", meaning: "Praiseworthy" },
+  { name: "Mansoor", meaning: "Victorious" },
+  { name: "Mahir", meaning: "Skilled, expert" },
+  { name: "Murtaza", meaning: "Chosen one" },
+  { name: "Nadir", meaning: "Rare" },
+  { name: "Nashit", meaning: "Energetic" },
+  { name: "Nawaf", meaning: "High, lofty" },
+  { name: "Qasim", meaning: "Distributor" },
+  { name: "Rafi", meaning: "Exalted, noble" },
+  { name: "Rafiq", meaning: "Companion" },
+  { name: "Rami", meaning: "Archer" },
+  { name: "Rashid", meaning: "Rightly guided" },
+  { name: "Rizwan", meaning: "Satisfaction" },
+  { name: "Saad", meaning: "Lucky, fortunate" },
+  { name: "Saif", meaning: "Sword" },
+  { name: "Sami", meaning: "Elevated, sublime" },
+  { name: "Shahid", meaning: "Witness" },
+  { name: "Shafiq", meaning: "Kind" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Usman", meaning: "Baby bustard" },
+  { name: "Wasiq", meaning: "Trustworthy" },
+  { name: "Yasir", meaning: "Easy-going" },
+  { name: "Younis", meaning: "Dove" },
+  { name: "Zaid", meaning: "Growth, abundance" },
+  { name: "Zain", meaning: "Beauty, grace" },
+  { name: "Zaki", meaning: "Pure" },
+  { name: "Zubair", meaning: "Strong, intelligent" },
+  { name: "Ameer", meaning: "Leader" },
+  { name: "Arif", meaning: "Knowledgeable" },
+  { name: "Bashir", meaning: "Bringer of good news" },
+  { name: "Dawood", meaning: "Beloved" },
+  { name: "Faiz", meaning: "Victorious" },
+  { name: "Hadi", meaning: "Guide" },
+  { name: "Haroon", meaning: "Warrior" },
+  { name: "Ihsan", meaning: "Perfection" },
+  { name: "Ismail", meaning: "God will hear" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Kasim", meaning: "Distributor" },
+  { name: "Mahir", meaning: "Skilled, expert" },
+  { name: "Nabil", meaning: "Noble, high-born" },
+  { name: "Rauf", meaning: "Compassionate" },
+  { name: "Rashad", meaning: "Righteous" },
+  { name: "Sajid", meaning: "Prostrator" },
+  { name: "Salim", meaning: "Safe, secure" },
+  { name: "Sarim", meaning: "Brave" },
+  { name: "Shakir", meaning: "Thankful" },
+  { name: "Suhail", meaning: "Smooth, level" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Yahya", meaning: "Alive, living" },
+  { name: "Yasin", meaning: "One of the names of the Prophet Muhammad" },
+  { name: "Zafar", meaning: "Victory" },
+  { name: "Zeeshan", meaning: "High status" },
+  { name: "Adil", meaning: "Just, fair" },
+  { name: "Amin", meaning: "Trustworthy" },
+  { name: "Arqam", meaning: "Virtuous" },
+  { name: "Bilal", meaning: "Moistening" },
+  { name: "Faizan", meaning: "Benefactor" },
+  { name: "Ghaith", meaning: "Rain" },
+  { name: "Hamza", meaning: "Lion" },
+  { name: "Ihsan", meaning: "Perfection" },
+  { name: "Ismail", meaning: "God will hear" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Khalil", meaning: "Friend" },
+  { name: "Musa", meaning: "Drawn out of the water" },
+  { name: "Nadeem", meaning: "Companion, friend" },
+  { name: "Rashid", meaning: "Rightly guided" },
+  { name: "Rizwan", meaning: "Satisfaction" },
+  { name: "Saad", meaning: "Lucky, fortunate" },
+  { name: "Samir", meaning: "Entertaining companion" },
+  { name: "Shahid", meaning: "Witness" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Usman", meaning: "Baby bustard" },
+  { name: "Zafar", meaning: "Victory" },
+  { name: "Zeeshan", meaning: "High status" },
+  { name: "Abdulaziz", meaning: "Servant of the Mighty" },
+  { name: "Abdulrahman", meaning: "Servant of the Merciful" },
+  { name: "Adeel", meaning: "Just, fair" },
+  { name: "Ahsan", meaning: "Best, excellent" },
+  { name: "Amin", meaning: "Trustworthy" },
+  { name: "Arqam", meaning: "Virtuous" },
+  { name: "Bilal", meaning: "Moistening" },
+  { name: "Faizan", meaning: "Benefactor" },
+  { name: "Ghaith", meaning: "Rain" },
+  { name: "Hamza", meaning: "Lion" },
+  { name: "Haseeb", meaning: "Respected" },
+  { name: "Ibrahim", meaning: "Father of many" },
+  { name: "Imran", meaning: "Prosperity" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Jamil", meaning: "Handsome" },
+  { name: "Junaid", meaning: "Soldier" },
+  { name: "Khalil", meaning: "Friend" },
+  { name: "Luqman", meaning: "Wise" },
+  { name: "Mahmoud", meaning: "Praiseworthy" },
+  { name: "Mansoor", meaning: "Victorious" },
+  { name: "Mahir", meaning: "Skilled, expert" },
+  { name: "Murtaza", meaning: "Chosen one" },
+  { name: "Nabil", meaning: "Noble, high-born" },
+  { name: "Nashit", meaning: "Energetic" },
+  { name: "Rafi", meaning: "Exalted, noble" },
+  { name: "Rashid", meaning: "Rightly guided" },
+  { name: "Saad", meaning: "Lucky, fortunate" },
+  { name: "Sajid", meaning: "Prostrator" },
+  { name: "Salim", meaning: "Safe, secure" },
+  { name: "Samir", meaning: "Entertaining companion" },
+  { name: "Shakir", meaning: "Thankful" },
+  { name: "Suhail", meaning: "Smooth, level" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Usman", meaning: "Baby bustard" },
+  { name: "Yasir", meaning: "Easy-going" },
+  { name: "Younis", meaning: "Dove" },
+  { name: "Zaid", meaning: "Growth, abundance" },
+  { name: "Zain", meaning: "Beauty, grace" },
+  { name: "Zaki", meaning: "Pure" },
+  { name: "Zubair", meaning: "Strong, intelligent" },
+  { name: "Aadil", meaning: "Just, fair" },
+  { name: "Aamir", meaning: "Prosperous" },
+  { name: "Aarif", meaning: "Knowledgeable" },
+  { name: "Aashif", meaning: "Forgiver" },
+  { name: "Ahsan", meaning: "Best, excellent" },
+  { name: "Ayaan", meaning: "Gift of God" },
+  { name: "Badr", meaning: "Full moon" },
+  { name: "Basil", meaning: "Brave, courageous" },
+  { name: "Danish", meaning: "Knowledge" },
+  { name: "Ehsan", meaning: "Perfection, beneficence" },
+  { name: "Fahad", meaning: "Panther, cheetah" },
+  { name: "Faris", meaning: "Knight" },
+  { name: "Farid", meaning: "Unique, unmatched" },
+  { name: "Furqan", meaning: "Criterion" },
+  { name: "Ghani", meaning: "Rich, wealthy" },
+  { name: "Ghalib", meaning: "Victor" },
+  { name: "Habib", meaning: "Beloved" },
+  { name: "Hamid", meaning: "Praiseworthy" },
+  { name: "Haseeb", meaning: "Respected" },
+  { name: "Hasan", meaning: "Good, handsome" },
+  { name: "Hussain", meaning: "Handsome, young" },
+  { name: "Ibrahim", meaning: "Father of many" },
+  { name: "Ilyas", meaning: "Elijah" },
+  { name: "Imran", meaning: "Prosperity" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Jamal", meaning: "Beauty" },
+  { name: "Jameel", meaning: "Handsome" },
+  { name: "Junaid", meaning: "Soldier" },
+  { name: "Juzar", meaning: "God-fearing" },
+  { name: "Kadir", meaning: "Powerful" },
+  { name: "Khalid", meaning: "Eternal, immortal" },
+  { name: "Khalil", meaning: "Friend" },
+  { name: "Luqman", meaning: "Wise" },
+  { name: "Mahmoud", meaning: "Praiseworthy" },
+  { name: "Mansoor", meaning: "Victorious" },
+  { name: "Mahir", meaning: "Skilled, expert" },
+  { name: "Murtaza", meaning: "Chosen one" },
+  { name: "Nadir", meaning: "Rare" },
+  { name: "Nashit", meaning: "Energetic" },
+  { name: "Nawaf", meaning: "High, lofty" },
+  { name: "Qasim", meaning: "Distributor" },
+  { name: "Rafi", meaning: "Exalted, noble" },
+  { name: "Rafiq", meaning: "Companion" },
+  { name: "Rami", meaning: "Archer" },
+  { name: "Rashid", meaning: "Rightly guided" },
+  { name: "Rizwan", meaning: "Satisfaction" },
+  { name: "Saad", meaning: "Lucky, fortunate" },
+  { name: "Saif", meaning: "Sword" },
+  { name: "Sami", meaning: "Elevated, sublime" },
+  { name: "Shahid", meaning: "Witness" },
+  { name: "Shafiq", meaning: "Kind" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Usman", meaning: "Baby bustard" },
+  { name: "Wasiq", meaning: "Trustworthy" },
+  { name: "Yasir", meaning: "Easy-going" },
+  { name: "Younis", meaning: "Dove" },
+  { name: "Zaid", meaning: "Growth, abundance" },
+  { name: "Zain", meaning: "Beauty, grace" },
+  { name: "Zaki", meaning: "Pure" },
+  { name: "Zubair", meaning: "Strong, intelligent" },
+  { name: "Ameer", meaning: "Leader" },
+  { name: "Arif", meaning: "Knowledgeable" },
+  { name: "Bashir", meaning: "Bringer of good news" },
+  { name: "Dawood", meaning: "Beloved" },
+  { name: "Faiz", meaning: "Victorious" },
+  { name: "Hadi", meaning: "Guide" },
+  { name: "Haroon", meaning: "Warrior" },
+  { name: "Ihsan", meaning: "Perfection" },
+  { name: "Ismail", meaning: "God will hear" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Kasim", meaning: "Distributor" },
+  { name: "Mahir", meaning: "Skilled, expert" },
+  { name: "Nabil", meaning: "Noble, high-born" },
+  { name: "Rauf", meaning: "Compassionate" },
+  { name: "Rashad", meaning: "Righteous" },
+  { name: "Sajid", meaning: "Prostrator" },
+  { name: "Salim", meaning: "Safe, secure" },
+  { name: "Sarim", meaning: "Brave" },
+  { name: "Shakir", meaning: "Thankful" },
+  { name: "Suhail", meaning: "Smooth, level" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Yahya", meaning: "Alive, living" },
+  { name: "Yasin", meaning: "One of the names of the Prophet Muhammad" },
+  { name: "Zafar", meaning: "Victory" },
+  { name: "Zeeshan", meaning: "High status" },
+  { name: "Adil", meaning: "Just, fair" },
+  { name: "Amin", meaning: "Trustworthy" },
+  { name: "Arqam", meaning: "Virtuous" },
+  { name: "Bilal", meaning: "Moistening" },
+  { name: "Faizan", meaning: "Benefactor" },
+  { name: "Ghaith", meaning: "Rain" },
+  { name: "Hamza", meaning: "Lion" },
+  { name: "Ihsan", meaning: "Perfection" },
+  { name: "Ismail", meaning: "God will hear" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Khalil", meaning: "Friend" },
+  { name: "Musa", meaning: "Drawn out of the water" },
+  { name: "Nadeem", meaning: "Companion, friend" },
+  { name: "Rashid", meaning: "Rightly guided" },
+  { name: "Rizwan", meaning: "Satisfaction" },
+  { name: "Saad", meaning: "Lucky, fortunate" },
+  { name: "Samir", meaning: "Entertaining companion" },
+  { name: "Shahid", meaning: "Witness" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Usman", meaning: "Baby bustard" },
+  { name: "Zafar", meaning: "Victory" },
+  { name: "Zeeshan", meaning: "High status" },
+  { name: "Aadil", meaning: "Just, fair" },
+  { name: "Aamir", meaning: "Prosperous" },
+  { name: "Aarif", meaning: "Knowledgeable" },
+  { name: "Aashif", meaning: "Forgiver" },
+  { name: "Ahsan", meaning: "Best, excellent" },
+  { name: "Ayaan", meaning: "Gift of God" },
+  { name: "Badr", meaning: "Full moon" },
+  { name: "Basil", meaning: "Brave, courageous" },
+  { name: "Danish", meaning: "Knowledge" },
+  { name: "Ehsan", meaning: "Perfection, beneficence" },
+  { name: "Fahad", meaning: "Panther, cheetah" },
+  { name: "Faris", meaning: "Knight" },
+  { name: "Farid", meaning: "Unique, unmatched" },
+  { name: "Furqan", meaning: "Criterion" },
+  { name: "Ghani", meaning: "Rich, wealthy" },
+  { name: "Ghalib", meaning: "Victor" },
+  { name: "Habib", meaning: "Beloved" },
+  { name: "Hamid", meaning: "Praiseworthy" },
+  { name: "Haseeb", meaning: "Respected" },
+  { name: "Hasan", meaning: "Good, handsome" },
+  { name: "Hussain", meaning: "Handsome, young" },
+  { name: "Ibrahim", meaning: "Father of many" },
+  { name: "Ilyas", meaning: "Elijah" },
+  { name: "Imran", meaning: "Prosperity" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Jamal", meaning: "Beauty" },
+  { name: "Jameel", meaning: "Handsome" },
+  { name: "Junaid", meaning: "Soldier" },
+  { name: "Juzar", meaning: "God-fearing" },
+  { name: "Kadir", meaning: "Powerful" },
+  { name: "Khalid", meaning: "Eternal, immortal" },
+  { name: "Khalil", meaning: "Friend" },
+  { name: "Luqman", meaning: "Wise" },
+  { name: "Mahmoud", meaning: "Praiseworthy" },
+  { name: "Mansoor", meaning: "Victorious" },
+  { name: "Mahir", meaning: "Skilled, expert" },
+  { name: "Murtaza", meaning: "Chosen one" },
+  { name: "Nadir", meaning: "Rare" },
+  { name: "Nashit", meaning: "Energetic" },
+  { name: "Nawaf", meaning: "High, lofty" },
+  { name: "Qasim", meaning: "Distributor" },
+  { name: "Rafi", meaning: "Exalted, noble" },
+  { name: "Rafiq", meaning: "Companion" },
+  { name: "Rami", meaning: "Archer" },
+  { name: "Rashid", meaning: "Rightly guided" },
+  { name: "Rizwan", meaning: "Satisfaction" },
+  { name: "Saad", meaning: "Lucky, fortunate" },
+  { name: "Saif", meaning: "Sword" },
+  { name: "Sami", meaning: "Elevated, sublime" },
+  { name: "Shahid", meaning: "Witness" },
+  { name: "Shafiq", meaning: "Kind" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Usman", meaning: "Baby bustard" },
+  { name: "Wasiq", meaning: "Trustworthy" },
+  { name: "Yasir", meaning: "Easy-going" },
+  { name: "Younis", meaning: "Dove" },
+  { name: "Zaid", meaning: "Growth, abundance" },
+  { name: "Zain", meaning: "Beauty, grace" },
+  { name: "Zaki", meaning: "Pure" },
+  { name: "Zubair", meaning: "Strong, intelligent" },
+  { name: "Ameer", meaning: "Leader" },
+  { name: "Arif", meaning: "Knowledgeable" },
+  { name: "Bashir", meaning: "Bringer of good news" },
+  { name: "Dawood", meaning: "Beloved" },
+  { name: "Faiz", meaning: "Victorious" },
+  { name: "Hadi", meaning: "Guide" },
+  { name: "Haroon", meaning: "Warrior" },
+  { name: "Ihsan", meaning: "Perfection" },
+  { name: "Ismail", meaning: "God will hear" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Kasim", meaning: "Distributor" },
+  { name: "Mahir", meaning: "Skilled, expert" },
+  { name: "Nabil", meaning: "Noble, high-born" },
+  { name: "Rauf", meaning: "Compassionate" },
+  { name: "Rashad", meaning: "Righteous" },
+  { name: "Sajid", meaning: "Prostrator" },
+  { name: "Salim", meaning: "Safe, secure" },
+  { name: "Sarim", meaning: "Brave" },
+  { name: "Shakir", meaning: "Thankful" },
+  { name: "Suhail", meaning: "Smooth, level" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Yahya", meaning: "Alive, living" },
+  { name: "Yasin", meaning: "One of the names of the Prophet Muhammad" },
+  { name: "Zafar", meaning: "Victory" },
+  { name: "Zeeshan", meaning: "High status" },
+  { name: "Adil", meaning: "Just, fair" },
+  { name: "Amin", meaning: "Trustworthy" },
+  { name: "Arqam", meaning: "Virtuous" },
+  { name: "Bilal", meaning: "Moistening" },
+  { name: "Faizan", meaning: "Benefactor" },
+  { name: "Ghaith", meaning: "Rain" },
+  { name: "Hamza", meaning: "Lion" },
+  { name: "Ihsan", meaning: "Perfection" },
+  { name: "Ismail", meaning: "God will hear" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Khalil", meaning: "Friend" },
+  { name: "Musa", meaning: "Drawn out of the water" },
+  { name: "Nadeem", meaning: "Companion, friend" },
+  { name: "Rashid", meaning: "Rightly guided" },
+  { name: "Rizwan", meaning: "Satisfaction" },
+  { name: "Saad", meaning: "Lucky, fortunate" },
+  { name: "Samir", meaning: "Entertaining companion" },
+  { name: "Shahid", meaning: "Witness" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Usman", meaning: "Baby bustard" },
+  { name: "Zafar", meaning: "Victory" },
+  { name: "Zeeshan", meaning: "High status" },
+  { name: "Aadil", meaning: "Just, fair" },
+  { name: "Aamir", meaning: "Prosperous" },
+  { name: "Aarif", meaning: "Knowledgeable" },
+  { name: "Aashif", meaning: "Forgiver" },
+  { name: "Ahsan", meaning: "Best, excellent" },
+  { name: "Ayaan", meaning: "Gift of God" },
+  { name: "Badr", meaning: "Full moon" },
+  { name: "Basil", meaning: "Brave, courageous" },
+  { name: "Danish", meaning: "Knowledge" },
+  { name: "Ehsan", meaning: "Perfection, beneficence" },
+  { name: "Fahad", meaning: "Panther, cheetah" },
+  { name: "Faris", meaning: "Knight" },
+  { name: "Farid", meaning: "Unique, unmatched" },
+  { name: "Furqan", meaning: "Criterion" },
+  { name: "Ghani", meaning: "Rich, wealthy" },
+  { name: "Ghalib", meaning: "Victor" },
+  { name: "Habib", meaning: "Beloved" },
+  { name: "Hamid", meaning: "Praiseworthy" },
+  { name: "Haseeb", meaning: "Respected" },
+  { name: "Hasan", meaning: "Good, handsome" },
+  { name: "Hussain", meaning: "Handsome, young" },
+  { name: "Ibrahim", meaning: "Father of many" },
+  { name: "Ilyas", meaning: "Elijah" },
+  { name: "Imran", meaning: "Prosperity" },
+  { name: "Jabir", meaning: "Comforter" },
+  { name: "Jamal", meaning: "Beauty" },
+  { name: "Jameel", meaning: "Handsome" },
+  { name: "Junaid", meaning: "Soldier" },
+  { name: "Juzar", meaning: "God-fearing" },
+  { name: "Kadir", meaning: "Powerful" },
+  { name: "Khalid", meaning: "Eternal, immortal" },
+  { name: "Khalil", meaning: "Friend" },
+  { name: "Luqman", meaning: "Wise" },
+  { name: "Mahmoud", meaning: "Praiseworthy" },
+  { name: "Mansoor", meaning: "Victorious" },
+  { name: "Mahir", meaning: "Skilled, expert" },
+  { name: "Murtaza", meaning: "Chosen one" },
+  { name: "Nadir", meaning: "Rare" },
+  { name: "Nashit", meaning: "Energetic" },
+  { name: "Nawaf", meaning: "High, lofty" },
+  { name: "Qasim", meaning: "Distributor" },
+  { name: "Rafi", meaning: "Exalted, noble" },
+  { name: "Rafiq", meaning: "Companion" },
+  { name: "Rami", meaning: "Archer" },
+  { name: "Rashid", meaning: "Rightly guided" },
+  { name: "Rizwan", meaning: "Satisfaction" },
+  { name: "Saad", meaning: "Lucky, fortunate" },
+  { name: "Saif", meaning: "Sword" },
+  { name: "Sami", meaning: "Elevated, sublime" },
+  { name: "Shahid", meaning: "Witness" },
+  { name: "Shafiq", meaning: "Kind" },
+  { name: "Tariq", meaning: "Morning star" },
+  { name: "Usman", meaning: "Baby bustard" },
+  { name: "Wasiq", meaning: "Trustworthy" },
+  { name: "Yasir", meaning: "Easy-going" },
+  { name: "Younis", meaning: "Dove" },
+  { name: "Zaid", meaning: "Growth, abundance" },
+  { name: "Zain", meaning: "Beauty, grace" },
+  { name: "Zaki", meaning: "Pure" },
+  { name: "Zubair", meaning: "Strong, intelligent" }  
+        ];
+
+        const muslimGirlNames = [
+        { name: "Aabida", meaning: "Worshipper" },
+  { name: "Aasma", meaning: "Exalted" },
+  { name: "Aisha", meaning: "Alive, living" },
+  { name: "Aisha", meaning: "Alive" },
+  { name: "Aminah", meaning: "Trustworthy, faithful" },
+  { name: "Amira", meaning: "Princess" },
+  { name: "Anisa", meaning: "Friendly, companion" },
+  { name: "Areeba", meaning: "Wise, intelligent" },
+  { name: "Ayesha", meaning: "Alive" },
+  { name: "Azzah", meaning: "Strong, powerful" },
+  { name: "Basma", meaning: "Smile" },
+  { name: "Bilqis", meaning: "Queen of Sheba" },
+  { name: "Dalal", meaning: "Coquettish, charming" },
+  { name: "Dania", meaning: "Near, close" },
+  { name: "Durra", meaning: "Pearl" },
+  { name: "Elham", meaning: "Inspiration" },
+  { name: "Fatimah", meaning: "Captivating" },
+  { name: "Fariha", meaning: "Joyful, happy" },
+  { name: "Farida", meaning: "Unique, precious" },
+  { name: "Fatima", meaning: "Captivating" },
+  { name: "Hadiya", meaning: "Guide to righteousness" },
+  { name: "Hana", meaning: "Happiness" },
+  { name: "Haneen", meaning: "Longing" },
+  { name: "Haniya", meaning: "Happy, delighted" },
+  { name: "Haseena", meaning: "Beautiful" },
+  { name: "Hayat", meaning: "Life" },
+  { name: "Imaan", meaning: "Faith" },
+  { name: "Ishrat", meaning: "Comfort" },
+  { name: "Jameela", meaning: "Beautiful" },
+  { name: "Jannah", meaning: "Paradise" },
+  { name: "Jasmine", meaning: "Flower" },
+  { name: "Khadija", meaning: "Premature child" },
+  { name: "Khalida", meaning: "Eternal" },
+  { name: "Laila", meaning: "Night" },
+  { name: "Layla", meaning: "Night" },
+  { name: "Mariam", meaning: "Mary" },
+  { name: "Meher", meaning: "Benevolence" },
+  { name: "Mona", meaning: "Wishes" },
+  { name: "Muneera", meaning: "Luminous" },
+  { name: "Maha", meaning: "Oryx" },
+  { name: "Naima", meaning: "Comfort" },
+  { name: "Nadia", meaning: "Caller, announcer" },
+  { name: "Naila", meaning: "Successful" },
+  { name: "Najma", meaning: "Star" },
+  { name: "Nura", meaning: "Light" },
+  { name: "Rabia", meaning: "Spring" },
+  { name: "Rania", meaning: "Gazing" },
+  { name: "Ruqayyah", meaning: "Gentle" },
+  { name: "Sabah", meaning: "Morning" },
+  { name: "Sabrina", meaning: "Legendary princess" },
+  { name: "Sadaf", meaning: "Seashell" },
+  { name: "Sahar", meaning: "Dawn" },
+  { name: "Sana", meaning: "Radiance" },
+  { name: "Sarah", meaning: "Princess" },
+  { name: "Sadia", meaning: "Lucky" },
+  { name: "Salma", meaning: "Safe, secure" },
+  { name: "Samira", meaning: "Companion in evening talk" },
+  { name: "Sana", meaning: "Radiance" },
+  { name: "Sahar", meaning: "Dawn" },
+  { name: "Shaista", meaning: "Polite, modest" },
+  { name: "Shazia", meaning: "Rare" },
+  { name: "Sofia", meaning: "Wisdom" },
+  { name: "Sumaya", meaning: "High above" },
+  { name: "Sundus", meaning: "Silk" },
+  { name: "Suraya", meaning: "Pleiades (star cluster)" },
+  { name: "Tamara", meaning: "Date palm" },
+  { name: "Tasneem", meaning: "Fountain of Paradise" },
+  { name: "Tharaa", meaning: "Radiance" },
+  { name: "Yasmin", meaning: "Jasmine flower" },
+  { name: "Yumna", meaning: "Blessed" },
+  { name: "Zahra", meaning: "Flower" },
+  { name: "Zainab", meaning: "Fragrant flower" },
+  { name: "Zara", meaning: "Princess" },
+  { name: "Zayna", meaning: "Beautiful" },
+  { name: "Aafiya", meaning: "Healthy" },
+  { name: "Aalia", meaning: "Exalted" },
+  { name: "Aasma", meaning: "Exalted" },
+  { name: "Aatiya", meaning: "Gift" },
+  { name: "Afra", meaning: "White" },
+  { name: "Aisha", meaning: "Alive" },
+  { name: "Aishah", meaning: "Alive" },
+  { name: "Aleena", meaning: "Soft" },
+  { name: "Alia", meaning: "Sublime" },
+  { name: "Amal", meaning: "Hope" },
+  { name: "Amani", meaning: "Wishes" },
+  { name: "Aminah", meaning: "Trustworthy" },
+  { name: "Amira", meaning: "Princess" },
+  { name: "Anisa", meaning: "Companion" },
+  { name: "Areeba", meaning: "Wise" },
+  { name: "Arwa", meaning: "Gracefulness" },
+  { name: "Asma", meaning: "Supreme" },
+  { name: "Ayesha", meaning: "Alive" },
+  { name: "Aziza", meaning: "Beloved" },
+  { name: "Basma", meaning: "Smile" },
+  { name: "Batu", meaning: "Snow leopard" },
+  { name: "Bilqis", meaning: "Queen of Sheba" },
+  { name: "Dalia", meaning: "Grape vine" },
+  { name: "Dania", meaning: "Near" },
+  { name: "Durra", meaning: "Pearl" },
+  { name: "Elham", meaning: "Inspiration" },
+  { name: "Fatimah", meaning: "Captivating" },
+  { name: "Fariha", meaning: "Happy" },
+  { name: "Farida", meaning: "Unique" },
+  { name: "Fariha", meaning: "Happy" },
+  { name: "Ghazal", meaning: "Poetry" },
+  { name: "Gulnar", meaning: "Pomegranate flower" },
+  { name: "Hadiya", meaning: "Guide" },
+  { name: "Hana", meaning: "Happiness" },
+  { name: "Haneen", meaning: "Longing" },
+  { name: "Haniya", meaning: "Happy" },
+  { name: "Haseena", meaning: "Beautiful" },
+  { name: "Hayat", meaning: "Life" },
+  { name: "Imaan", meaning: "Faith" },
+  { name: "Ishrat", meaning: "Comfort" },
+  { name: "Jameela", meaning: "Beautiful" },
+  { name: "Jannah", meaning: "Paradise" },
+  { name: "Jasmine", meaning: "Flower" },
+  { name: "Khadija", meaning: "Premature child" },
+  { name: "Khalida", meaning: "Eternal" },
+  { name: "Laila", meaning: "Night" },
+  { name: "Layla", meaning: "Night" },
+  { name: "Mariam", meaning: "Mary" },
+  { name: "Meher", meaning: "Benevolence" },
+  { name: "Mona", meaning: "Wishes" },
+  { name: "Muneera", meaning: "Luminous" },
+  { name: "Maha", meaning: "Oryx" },
+  { name: "Naima", meaning: "Comfort" },
+  { name: "Nadia", meaning: "Caller" },
+  { name: "Naila", meaning: "Successful" },
+  { name: "Najma", meaning: "Star" },
+  { name: "Nura", meaning: "Light" },
+  { name: "Rabia", meaning: "Spring" },
+  { name: "Rania", meaning: "Gazing" },
+  { name: "Ruqayyah", meaning: "Gentle" },
+  { name: "Sabah", meaning: "Morning" },
+  { name: "Sabrina", meaning: "Legendary princess" },
+  { name: "Sadaf", meaning: "Seashell" },
+  { name: "Sahar", meaning: "Dawn" },
+  { name: "Sana", meaning: "Radiance" },
+  { name: "Sarah", meaning: "Princess" },
+  { name: "Sadia", meaning: "Lucky" },
+  { name: "Salma", meaning: "Safe" },
+  { name: "Samira", meaning: "Companion" },
+  { name: "Sanaa", meaning: "Radiance" },
+  { name: "Sahar", meaning: "Dawn" },
+  { name: "Shaista", meaning: "Polite" },
+  { name: "Shazia", meaning: "Rare" },
+  { name: "Sofia", meaning: "Wisdom" },
+  { name: "Sumaya", meaning: "High above" },
+  { name: "Sundus", meaning: "Silk" },
+  { name: "Suraya", meaning: "Pleiades" },
+  { name: "Tamara", meaning: "Date palm" },
+  { name: "Tasneem", meaning: "Fountain of Paradise" },
+  { name: "Tharaa", meaning: "Radiance" },
+  { name: "Yasmin", meaning: "Jasmine" },
+  { name: "Yumna", meaning: "Blessed" },
+  { name: "Zahra", meaning: "Flower" },
+  { name: "Zainab", meaning: "Fragrant flower" },
+  { name: "Zara", meaning: "Princess" },
+  { name: "Zayna", meaning: "Beautiful" },
+  { name: "Aafiya", meaning: "Healthy" },
+  { name: "Aalia", meaning: "Exalted" },
+  { name: "Aasma", meaning: "Exalted" },
+  { name: "Aatiya", meaning: "Gift" },
+  { name: "Afra", meaning: "White" },
+  { name: "Aisha", meaning: "Alive" },
+  { name: "Aishah", meaning: "Alive" },
+  { name: "Aleena", meaning: "Soft" },
+  { name: "Alia", meaning: "Sublime" },
+  { name: "Amal", meaning: "Hope" },
+  { name: "Amani", meaning: "Wishes" },
+  { name: "Aminah", meaning: "Trustworthy" },
+  { name: "Amira", meaning: "Princess" },
+  { name: "Anisa", meaning: "Companion" },
+  { name: "Areeba", meaning: "Wise" },
+  { name: "Arwa", meaning: "Gracefulness" },
+  { name: "Asma", meaning: "Supreme" },
+  { name: "Ayesha", meaning: "Alive" },
+  { name: "Aziza", meaning: "Beloved" },
+  { name: "Basma", meaning: "Smile" },
+  { name: "Batu", meaning: "Snow leopard" },
+  { name: "Bilqis", meaning: "Queen of Sheba" },
+  { name: "Dalia", meaning: "Grape vine" },
+  { name: "Dania", meaning: "Near" },
+  { name: "Durra", meaning: "Pearl" },
+  { name: "Elham", meaning: "Inspiration" },
+  { name: "Fatimah", meaning: "Captivating" },
+  { name: "Fariha", meaning: "Happy" },
+  { name: "Farida", meaning: "Unique" },
+  { name: "Fariha", meaning: "Happy" },
+  { name: "Ghazal", meaning: "Poetry" },
+  { name: "Gulnar", meaning: "Pomegranate flower" },
+  { name: "Hadiya", meaning: "Guide" },
+  { name: "Hana", meaning: "Happiness" },
+  { name: "Haneen", meaning: "Longing" },
+  { name: "Haniya", meaning: "Happy" },
+  { name: "Haseena", meaning: "Beautiful" },
+  { name: "Hayat", meaning: "Life" },
+  { name: "Imaan", meaning: "Faith" },
+  { name: "Ishrat", meaning: "Comfort" },
+  { name: "Jameela", meaning: "Beautiful" },
+  { name: "Jannah", meaning: "Paradise" },
+  { name: "Jasmine", meaning: "Flower" },
+  { name: "Khadija", meaning: "Premature child" },
+  { name: "Khalida", meaning: "Eternal" },
+  { name: "Laila", meaning: "Night" },
+  { name: "Layla", meaning: "Night" },
+  { name: "Mariam", meaning: "Mary" },
+  { name: "Meher", meaning: "Benevolence" },
+  { name: "Mona", meaning: "Wishes" },
+  { name: "Muneera", meaning: "Luminous" },
+  { name: "Maha", meaning: "Oryx" },
+  { name: "Naima", meaning: "Comfort" },
+  { name: "Nadia", meaning: "Caller" },
+  { name: "Naila", meaning: "Successful" },
+  { name: "Najma", meaning: "Star" },
+  { name: "Nura", meaning: "Light" },
+  { name: "Rabia", meaning: "Spring" },
+  { name: "Rania", meaning: "Gazing" },
+  { name: "Ruqayyah", meaning: "Gentle" },
+  { name: "Sabah", meaning: "Morning" },
+  { name: "Sabrina", meaning: "Legendary princess" },
+  { name: "Sadaf", meaning: "Seashell" },
+  { name: "Sahar", meaning: "Dawn" },
+  { name: "Sana", meaning: "Radiance" },
+  { name: "Sarah", meaning: "Princess" },
+  { name: "Sadia", meaning: "Lucky" },
+  { name: "Salma", meaning: "Safe" },
+  { name: "Samira", meaning: "Companion" },
+  { name: "Sanaa", meaning: "Radiance" },
+  { name: "Sahar", meaning: "Dawn" },
+  { name: "Shaista", meaning: "Polite" },
+  { name: "Shazia", meaning: "Rare" },
+  { name: "Sofia", meaning: "Wisdom" },
+  { name: "Sumaya", meaning: "High above" },
+  { name: "Sundus", meaning: "Silk" },
+  { name: "Suraya", meaning: "Pleiades" },
+  { name: "Tamara", meaning: "Date palm" },
+  { name: "Tasneem", meaning: "Fountain of Paradise" },
+  { name: "Tharaa", meaning: "Radiance" },
+  { name: "Yasmin", meaning: "Jasmine" },
+  { name: "Yumna", meaning: "Blessed" },
+  { name: "Zahra", meaning: "Flower" },
+  { name: "Zainab", meaning: "Fragrant flower" },
+  { name: "Zara", meaning: "Princess" },
+  { name: "Zayna", meaning: "Beautiful" }
+];
+
+
+        const allNames = [
+            ...muslimBoyNames.map(name => ({ ...name, gender: 'male' })),
+            ...muslimGirlNames.map(name => ({ ...name, gender: 'female' }))
+        ];
+
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+        const nameCards = document.getElementById('name-cards');
+        const genderBtns = document.querySelectorAll('.gender-btn');
+        const modal = document.getElementById('modal');
+        const modalMessage = document.getElementById('modal-message');
+        const closeModal = document.getElementsByClassName('close')[0];
+
+        let currentGender = 'all';
+
+        // Particles.js configuration
+        particlesJS.load('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        
+    function searchNames() {
+        const query = searchInput.value.toLowerCase().trim();
+        let filteredNames = allNames;
+
+        if (currentGender !== 'all') {
+            filteredNames = allNames.filter(name => name.gender === currentGender);
+        }
+
+        if (query) {
+            filteredNames = filteredNames.filter(name => 
+                name.name.toLowerCase().includes(query) || 
+                name.meaning.toLowerCase().includes(query)
+            );
+
+            if (filteredNames.length === 0) {
+                const similarNames = findSimilarNames(query, allNames);
+                if (similarNames.length > 0) {
+                    showPopup(`Name not found. Did you mean: ${similarNames.slice(0, 5).map(name => name.name).join(', ')}?`);
+                } else {
+                    showPopup(`Name "${query}" not found. Try searching for a different name.`);
+                }
+                setTimeout(() => {
+                    hidePopup();
+                    searchInput.value = '';
+                    displayNames(allNames.slice(0, 20));
+                }, 5000);
+            } else {
+                showPopup(`Found ${filteredNames.length} name(s) matching "${query}".`);
+                setTimeout(hidePopup, 5000);
+            }
+        }
+
+        displayNames(filteredNames);
+    }
+
+    function showPopup(message) {
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.textContent = message;
+        document.body.appendChild(popup);
+        document.querySelector('.container').classList.add('blur');
+        setTimeout(() => popup.classList.add('show'), 10);
+    }
+
+    function hidePopup() {
+        const popup = document.querySelector('.popup');
+        if (popup) {
+            popup.classList.remove('show');
+            document.querySelector('.container').classList.remove('blur');
+            setTimeout(() => popup.remove(), 300);
+        }
+    }
+
+    searchBtn.addEventListener('click', searchNames);
+    searchInput.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
+            searchNames();
+        }
+    });
+
+  
+    function addNameCardEffects() {
+        const nameCards = document.querySelectorAll('.name-card');
+        nameCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    }
+
+    function displayNames(names) {
+        
+
+        addNameCardEffects();
+    }
+
+    // Initial display
+    displayNames(allNames.slice(0, 20));
+    
+function speakName(name) {
+    const utterance = new SpeechSynthesisUtterance(name);
+    utterance.lang = 'ar-SA'; // Set language to Arabic
+    speechSynthesis.speak(utterance);
+}
+
+
+let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+function toggleFavorite(name) {
+    const index = favorites.findIndex(fav => fav.name === name.name);
+    if (index === -1) {
+        favorites.push(name);
+    } else {
+        favorites.splice(index, 1);
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    displayNames(currentDisplayedNames);
+}
+
+
+function getNameOfTheDay() {
+    const today = new Date();
+    const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    const randomIndex = seed % allNames.length;
+    return allNames[randomIndex];
+}
+
+
+function generateCalligraphy(name) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 300;
+    canvas.height = 100;
+    ctx.fillStyle = '#1a237e';
+    ctx.font = 'bold 36px "Noto Nastaliq Urdu", serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(name, canvas.width / 2, canvas.height / 2);
+    return canvas.toDataURL();
+}
+
+
+function generateWordCloud(meaning) {
+    const words = meaning.split(' ');
+    let html = '';
+    words.forEach(word => {
+        const size = Math.random() * (24 - 12) + 12;
+        const color = `hsl(${Math.random() * 360}, 70%, 50%)`;
+        html += `<span style="font-size: ${size}px; color: ${color};">${word}</span> `;
+    });
+    return html;
+}
+
+
+function displayNames(names) {
+    nameCards.innerHTML = '';
+    currentDisplayedNames = names;
+    names.forEach(name => {
+        const card = document.createElement('div');
+        card.className = 'name-card';
+        const isFavorite = favorites.some(fav => fav.name === name.name);
+        card.innerHTML = `
+            <span>${getRandomIcon()}</span>
+            <h3>${name.name}</h3>
+            <p>${name.meaning}</p>
+            <p>Gender: ${name.gender === 'male' ? 'Boy' : 'Girl'}</p>
+            <button class="pronounce-btn">Pronounce</button>
+            <button class="favorite-btn">${isFavorite ? '❤️' : '🤍'}</button>
+            <img src="${generateCalligraphy(name.name)}" alt="${name.name} calligraphy" class="calligraphy">
+            <div class="word-cloud">${generateWordCloud(name.meaning)}</div>
+        `;
+        card.querySelector('.pronounce-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            speakName(name.name);
+        });
+        card.querySelector('.favorite-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFavorite(name);
+        });
+        card.addEventListener('click', () => {
+            gsap.to(card, {
+                scale: 1.1,
+                duration: 0.3,
+                yoyo: true,
+                repeat: 1,
+                ease: "power2.inOut"
+            });
+        });
+        nameCards.appendChild(card);
+    });
+}
+
+
+const nameOfTheDay = getNameOfTheDay();
+const nameOfTheDayElement = document.createElement('div');
+nameOfTheDayElement.className = 'name-of-the-day';
+nameOfTheDayElement.innerHTML = `
+    <h2>Name of the Day</h2>
+    <h3>${nameOfTheDay.name}</h3>
+    <p>${nameOfTheDay.meaning}</p>
+`;
+document.querySelector('.container').insertBefore(nameOfTheDayElement, document.querySelector('.search-container'));
+
+
+const favoritesToggle = document.createElement('button');
+favoritesToggle.textContent = 'View Favorites';
+favoritesToggle.className = 'favorites-toggle';
+favoritesToggle.addEventListener('click', () => {
+    if (favoritesToggle.textContent === 'View Favorites') {
+        displayNames(favorites);
+        favoritesToggle.textContent = 'View All Names';
+    } else {
+        displayNames(allNames.slice(0, 20));
+        favoritesToggle.textContent = 'View Favorites';
+    }
+});
+document.querySelector('.container').insertBefore(favoritesToggle, nameCards);
+
+// Add styles for new features
+const newStyles = `
+    .name-of-the-day {
+        background-color: var(--accent-color);
+        color: var(--card-bg);
+        padding: 1rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    .pronounce-btn, .favorite-btn {
+        background-color: var(--secondary-color);
+        color: var(--card-bg);
+        border: none;
+        padding: 0.5rem 1rem;
+        margin: 0.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .calligraphy {
+        max-width: 100%;
+        margin-top: 1rem;
+    }
+    .word-cloud {
+        margin-top: 1rem;
+        line-height: 1.2;
+    }
+    .favorites-toggle {
+        background-color: var(--primary-color);
+        color: var(--card-bg);
+        border: none;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+`;
+const styleElement = document.createElement('style');
+styleElement.textContent = newStyles;
+document.head.appendChild(styleElement);
+
+// ... (rest of the previous code)
+// ... (previous code remains the same)
+
+// Add these new features after the existing code
+
+// Name origin and cultural significance
+const nameOrigins = {
+    // Add origins for each name, e.g., 'Muhammad': 'Arabic, meaning "praiseworthy"'
+};
+
+function getNameOrigin(name) {
+    return nameOrigins[name] || 'Origin information not available';
+}
+
+// Name popularity tracker
+let namePopularity = JSON.parse(localStorage.getItem('namePopularity')) || {};
+
+function updatePopularity(name) {
+    namePopularity[name] = (namePopularity[name] || 0) + 1;
+    localStorage.setItem('namePopularity', JSON.stringify(namePopularity));
+}
+
+// Name combination suggester
+function suggestNameCombination() {
+    const firstName = allNames[Math.floor(Math.random() * allNames.length)];
+    const lastName = allNames[Math.floor(Math.random() * allNames.length)];
+    return `${firstName.name} ${lastName.name}`;
+}
+
+// Islamic calendar converter
+function getIslamicDate() {
+    const today = new Date();
+    // This is a simplified conversion and may not be 100% accurate
+    const islamicYear = Math.floor((today.getFullYear() - 622) * (33/32));
+    const islamicMonth = ['Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani', 'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', 'Shaban', 'Ramadan', 'Shawwal', 'Dhu al-Qi"dah Dhu al-Hijjah"'][today.getMonth()];
+    return `${islamicMonth}, ${islamicYear} AH`;
+}
+
+const translations = {
+    'praiseworthy': 'محمود',
+    'servant': 'عبد',
+    'God': 'الله',
+    'light': 'نور',
+    'peace': 'سلام',
+    'victory': 'نصر',
+    'king': 'ملك',
+    'ruler': 'حاكم',
+    'beauty': 'جمال',
+    'grace': 'نعمة',
+    'honor': 'شرف',
+    'mercy': 'رحمة',
+    'blessing': 'بركة',
+    'truth': 'حق',
+    'life': 'حياة',
+    'faith': 'إيمان',
+    'pure': 'طاهر',
+    'guidance': 'هداية',
+    'wisdom': 'حكمة',
+    'power': 'قوة',
+    'forgiveness': 'مغفرة',
+    'joy': 'فرح',
+    'hope': 'أمل',
+    'gift': 'هدية',
+    'paradise': 'جنة',
+    'moon': 'قمر',
+    'star': 'نجم',
+    'trustworthy': 'أمين',
+    'courage': 'شجاعة',
+    'companion': 'رفيق',
+    'charity': 'صدقة',
+    'knowledge': 'علم',
+    'justice': 'عدالة',
+    'brilliance': 'بريق',
+    'success': 'نجاح',
+    'guardian': 'ولي',
+    'loyalty': 'وفاء',
+    'patience': 'صبر',
+    'humility': 'تواضع',
+    'noble': 'نبيل',
+    'wise': 'عاقل',
+    'righteous': 'صالح',
+    'humble': 'متواضع',
+    'friend': 'صديق',
+    'strong': 'قوي',
+    'compassion': 'رحيم',
+    'eternal': 'أبدي',
+    'fortunate': 'محظوظ',
+    'flower': 'زهرة',
+    'sun': 'شمس',
+    'radiance': 'نور',
+    'sincerity': 'إخلاص',
+    'leader': 'قائد',
+    'justice': 'عدالة',
+    'noble': 'نبيل',
+    'brave': 'شجاع',
+    'eternal': 'أبدي',
+    'wealth': 'ثروة',
+    'heaven': 'سماء',
+    'day': 'يوم',
+    'night': 'ليل',
+    'spring': 'ربيع',
+    'rain': 'مطر',
+    'river': 'نهر',
+    'mountain': 'جبل'
+};
+
+
+function translateMeaning(meaning) {
+    return meaning.split(' ').map(word => translations[word.toLowerCase()] || word).join(' ');
+}
+
+// Interactive name explorer
+function createNameExplorer() {
+    const explorer = document.createElement('div');
+    explorer.className = 'name-explorer';
+    explorer.innerHTML = `
+        <h2>Name Explorer</h2>
+        <div class="explorer-options">
+            <button id="random-name">Random Name</button>
+            <button id="suggest-combination">Suggest Combination</button>
+            <button id="popular-names">Most Popular Names</button>
+        </div>
+        <div id="explorer-result"></div>
+    `;
+    document.querySelector('.container').appendChild(explorer);
+
+    document.getElementById('random-name').addEventListener('click', () => {
+        const randomName = allNames[Math.floor(Math.random() * allNames.length)];
+        document.getElementById('explorer-result').innerHTML = `
+            <h3>${randomName.name}</h3>
+            <p>Meaning: ${randomName.meaning}</p>
+            <p>Origin: ${getNameOrigin(randomName.name)}</p>
+            <p>Popularity: ${namePopularity[randomName.name] || 0} views</p>
+        `;
+    });
+
+    document.getElementById('suggest-combination').addEventListener('click', () => {
+        const combination = suggestNameCombination();
+        document.getElementById('explorer-result').innerHTML = `
+            <h3>Suggested Combination</h3>
+            <p>${combination}</p>
+        `;
+    });
+
+    document.getElementById('popular-names').addEventListener('click', () => {
+        const popularNames = Object.entries(namePopularity)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+        document.getElementById('explorer-result').innerHTML = `
+            <h3>Most Popular Names</h3>
+            <ol>
+                ${popularNames.map(([name, views]) => `<li>${name}: ${views} views</li>`).join('')}
+            </ol>
+        `;
+    });
+}
+
+
+function displayNames(names) {
+    nameCards.innerHTML = '';
+    currentDisplayedNames = names;
+    names.forEach(name => {
+        const card = document.createElement('div');
+        card.className = 'name-card';
+        const isFavorite = favorites.some(fav => fav.name === name.name);
+        card.innerHTML = `
+            <span>${getRandomIcon()}</span>
+            <h3>${name.name}</h3>
+            <p>${name.meaning}</p>
+            <p>Gender: ${name.gender === 'male' ? 'Boy' : 'Girl'}</p>
+            <p>Origin: ${getNameOrigin(name.name)}</p>
+            <p>Islamic Date: ${getIslamicDate()}</p>
+            <p>Arabic Translation: ${translateMeaning(name.meaning)}</p>
+            <button class="pronounce-btn">Pronounce</button>
+            <button class="favorite-btn">${isFavorite ? '❤️' : '🤍'}</button>
+            <img src="${generateCalligraphy(name.name)}" alt="${name.name} calligraphy" class="calligraphy">
+            <div class="word-cloud">${generateWordCloud(name.meaning)}</div>
+        `;
+        card.querySelector('.pronounce-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            speakName(name.name);
+        });
+        card.querySelector('.favorite-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFavorite(name);
+        });
+        card.addEventListener('click', () => {
+            updatePopularity(name.name);
+            gsap.to(card, {
+                scale: 1.1,
+                duration: 0.3,
+                yoyo: true,
+                repeat: 1,
+                ease: "power2.inOut"
+            });
+        });
+        nameCards.appendChild(card);
+    });
+}
+// ... existing code ...
+
+// Name numerology
+function calculateNameNumerology(name) {
+    const numerologyValue = name.toLowerCase().split('').reduce((sum, char) => sum + (char.charCodeAt(0) - 96), 0);
+    return numerologyValue % 9 || 9;
+}
+
+// Quranic references
+const quranicReferences = {
+    // Add references for names, e.g., 'Muhammad': 'Mentioned in Surah Al-Ahzab, verse 40'
+};
+
+function getQuranicReference(name) {
+    return quranicReferences[name] || 'No specific Quranic reference found';
+}
+
+// Name personality traits
+const personalityTraits = {
+    // Add traits for names, e.g., 'Ali': ['Brave', 'Loyal', 'Wise']
+};
+
+function getPersonalityTraits(name) {
+    return personalityTraits[name] || ['Traits not specified'];
+}
+
+// Update displayNames function
+function displayNames(names) {
+    nameCards.innerHTML = '';
+    currentDisplayedNames = names;
+    names.forEach(name => {
+        const card = document.createElement('div');
+        card.className = 'name-card';
+        const isFavorite = favorites.some(fav => fav.name === name.name);
+        card.innerHTML = `
+            <span>${getRandomIcon()}</span>
+            <h3>${name.name}</h3>
+            <p>${name.meaning}</p>
+            <p>Gender: ${name.gender === 'male' ? 'Boy' : 'Girl'}</p>
+            <p>Numerology: ${calculateNameNumerology(name.name)}</p>
+            <p>Quranic Reference: ${getQuranicReference(name.name)}</p>
+            <p>Personality Traits: ${getPersonalityTraits(name.name).join(', ')}</p>
+            <p>Origin: ${getNameOrigin(name.name)}</p>
+            <p>Islamic Date: ${getIslamicDate()}</p>
+            <p>Arabic Translation: ${translateMeaning(name.meaning)}</p>
+            <button class="pronounce-btn">Pronounce</button>
+            <button class="favorite-btn">${isFavorite ? '❤️' : '🤍'}</button>
+            <img src="${generateCalligraphy(name.name)}" alt="${name.name} calligraphy" class="calligraphy">
+            <div class="word-cloud">${generateWordCloud(name.meaning)}</div>
+        `;
+      
+        nameCards.appendChild(card);
+    });
+}
+
+
+
+
+
+
+
+function createNameQuiz() {
+    const quizContainer = document.createElement('div');
+    quizContainer.className = 'name-quiz';
+    quizContainer.innerHTML = `
+        <h2>Name Quiz</h2>
+        <p id="quiz-question"></p>
+        <input type="text" id="quiz-answer" placeholder="Your answer">
+        <button id="submit-quiz">Submit</button>
+        <p id="quiz-result"></p>
+    `;
+    document.querySelector('.container').appendChild(quizContainer);
+
+    let currentQuizName;
+
+    function newQuizQuestion() {
+        currentQuizName = allNames[Math.floor(Math.random() * allNames.length)];
+        document.getElementById('quiz-question').textContent = `What does the name "${currentQuizName.name}" mean?`;
+        document.getElementById('quiz-answer').value = '';
+        document.getElementById('quiz-result').textContent = '';
+    }
+
+    document.getElementById('submit-quiz').addEventListener('click', () => {
+        const userAnswer = document.getElementById('quiz-answer').value.toLowerCase();
+        const correctAnswer = currentQuizName.meaning.toLowerCase();
+        const result = document.getElementById('quiz-result');
+
+        if (userAnswer === correctAnswer) {
+            result.textContent = 'Correct! Well done!';
+            result.style.color = 'green';
+        } else {
+            result.textContent = `Sorry, the correct meaning is: "${currentQuizName.meaning}"`;
+            result.style.color = 'red';
+        }
+
+        setTimeout(newQuizQuestion, 3000);
+    });
+
+    newQuizQuestion();
+}
+
+
+createNameQuiz();
+
+const additionalStyles = `
+    .name-quiz {
+        background-color: var(--card-bg);
+        border-radius: 15px;
+        padding: 1rem;
+        margin-top: 2rem;
+    }
+    #quiz-answer {
+        width: 100%;
+        padding: 0.5rem;
+        margin: 0.5rem 0;
+    }
+    #submit-quiz {
+        background-color: var(--secondary-color);
+        color: var(--card-bg);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+`;
+styleElement.textContent += additionalStyles;
+
+
+
+
+createNameExplorer();
+
+
+const additionalStyless = `
+    .name-explorer {
+        background-color: var(--card-bg);
+        border-radius: 15px;
+        padding: 1rem;
+        margin-top: 2rem;
+    }
+    .explorer-options {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 1rem;
+    }
+    .explorer-options button {
+        background-color: var(--secondary-color);
+        color: var(--card-bg);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #explorer-result {
+        background-color: var(--bg-color);
+        padding: 1rem;
+        border-radius: 10px;
+    }
+`;
+styleElement.textContent += additionalStyless;
+
+// ... (rest of the previous code)
+
+        function getRandomIcon() {
+            const icons = ['☪️', '🕌', '🕋', '📿', '🌙', '⭐', '🌟', '✨', '🌠'];
+            return icons[Math.floor(Math.random() * icons.length)];
+        }
+
+        function levenshteinDistance(a, b) {
+            if (a.length === 0) return b.length;
+            if (b.length === 0) return a.length;
+
+            const matrix = [];
+
+            for (let i = 0; i <= b.length; i++) {
+                matrix[i] = [i];
+            }
+
+            for (let j = 0; j <= a.length; j++) {
+                matrix[0][j] = j;
+            }
+
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j - 1] + 1,
+                            matrix[i][j - 1] + 1,
+                            matrix[i - 1][j] + 1
+                        );
+                    }
+                }
+            }
+
+            return matrix[b.length][a.length];
+        }
+
+        function findSimilarNames(query, names, maxDistance = 3) {
+            return names.filter(name => 
+                levenshteinDistance(name.name.toLowerCase(), query.toLowerCase()) <= maxDistance
+            );
+        }
+
+        function displayNames(names) {
+            nameCards.innerHTML = '';
+            names.forEach(name => {
+                const card = document.createElement('div');
+                card.className = 'name-card';
+                card.innerHTML = `
+                    <span>${getRandomIcon()}</span>
+                    <h3>${name.name}</h3>
+                    <p>${name.meaning}</p>
+                    <p>Gender: ${name.gender === 'male' ? 'Boy' : 'Girl'}</p>
+                `;
+                card.addEventListener('click', () => {
+                    gsap.to(card, {
+                        scale: 1.1,
+                        duration: 0.3,
+                        yoyo: true,
+                        repeat: 1,
+                        ease: "power2.inOut"
+                    });
+                });
+                nameCards.appendChild(card);
+            });
+        }
+
+        function searchNames() {
+            const query = searchInput.value.toLowerCase().trim();
+            let filteredNames = allNames;
+
+            if (currentGender !== 'all') {
+                filteredNames = allNames.filter(name => name.gender === currentGender);
+            }
+
+            if (query) {
+                filteredNames = filteredNames.filter(name => 
+                    name.name.toLowerCase().includes(query) || 
+                    name.meaning.toLowerCase().includes(query)
+                );
+
+                if (filteredNames.length === 0) {
+                    const similarNames = findSimilarNames(query, allNames);
+                    if (similarNames.length > 0) {
+                        modalMessage.innerHTML = `
+                            <p>Sorry, the name "${query}" was not found. But it was very satisfying and honorable to search for it!</p>
+                            <p>Did you mean:</p>
+                            <ul>
+                                ${similarNames.slice(0, 5).map(name => `<li>${name.name}</li>`).join('')}
+                            </ul>
+                        `;
+                    } else {
+                        modalMessage.innerHTML = `
+                            <p>Sorry, the name "${query}" was not found. But it was very satisfying and honorable to search for it!</p>
+                            <p>Try searching for a different name or explore our collection.</p>
+                        `;
+                    }
+                    modal.style.display = "block";
+                    setTimeout(() => {
+                        modal.style.display = "none";
+                        searchInput.value = '';
+                        displayNames(allNames.slice(0, 20));
+                    }, 5000);
+                }
+            }
+
+            displayNames(filteredNames);
+        }
+
+        searchBtn.addEventListener('click', searchNames);
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                searchNames();
+            }
+        });
+
+        genderBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                genderBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentGender = btn.dataset.gender;
+                searchNames();
+            });
+        });
+
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Auto-refresh feature
+        setInterval(() => {
+            if (searchInput.value === '') {
+                displayNames(allNames.slice(0, 20));
+            }
+        }, 60000);
+
+        // Initial display
+        displayNames(allNames.slice(0, 20));
+    </script>
+</body>
+</html>  
